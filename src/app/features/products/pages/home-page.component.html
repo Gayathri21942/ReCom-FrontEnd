@@ -1,0 +1,113 @@
+<section class="hero">
+  <div class="hero-copy">
+    <div class="hero-topline">
+      <div class="hero-pill"><mat-icon>verified</mat-icon><span>Verified listings</span></div>
+      <div class="hero-pill"><mat-icon>support_agent</mat-icon><span>Live chat support</span></div>
+      <div class="hero-pill"><mat-icon>shield</mat-icon><span>Secure checkout</span></div>
+    </div>
+
+    <p class="eyebrow">Recommerce bazaar</p>
+    <h1>Trade smart on India's trusted second-hand marketplace.</h1>
+    <p class="subcopy">Discover certified pre-owned mobiles, cars, furniture, fashion, and electronics with transparent pricing, secure payments, and buyer protection.</p>
+    <div class="hero-actions">
+      <a mat-flat-button color="primary" routerLink="/sell">Post an ad</a>
+      <a mat-stroked-button routerLink="/" fragment="products">Shop deals</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>5,200+</strong><span>Verified sellers</span></div>
+      <div class="hero-stat"><strong>1,200+</strong><span>Daily listings</span></div>
+      <div class="hero-stat"><strong>4.9/5</strong><span>Buyer trust score</span></div>
+    </div>
+  </div>
+
+  <div class="deal-card">
+    <div class="deal-icon"><mat-icon>local_offer</mat-icon></div>
+    <span>Today's pick</span>
+    <strong>Up to 60% less than new</strong>
+    <p>Trusted offers, curated deals, and wishlist-ready items with seller ratings.</p>
+    <ul>
+      <li>Verified condition checks</li>
+      <li>Easy contact with sellers</li>
+      <li>Fast order insights and favorites</li>
+    </ul>
+  </div>
+</section>
+
+<section class="category-strip">
+  @for (category of categories; track category.value) {
+    <button type="button" class="category-tile" [class.selected]="filtersForm.value.category === category.value" (click)="selectCategory(category.value)">
+      <span>{{ category.label.slice(0, 1) }}</span>
+      {{ category.label }}
+    </button>
+  }
+</section>
+
+<mat-card class="filters-card" id="products">
+  <div class="filters-heading">
+    <strong>Search deals</strong>
+    <button mat-button type="button" (click)="clearFilters()">Clear filters</button>
+  </div>
+  <form [formGroup]="filtersForm" class="filters-grid">
+    <mat-form-field appearance="outline"><mat-label>Search</mat-label><input matInput formControlName="query" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>Category</mat-label><mat-select formControlName="category"><mat-option value="">All</mat-option>@for (category of categories; track category.value) {<mat-option [value]="category.value">{{ category.label }}</mat-option>}</mat-select></mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Location</mat-label>
+      <mat-select formControlName="location">
+        <mat-option value="">Location</mat-option>
+        @for (state of states; track state) {
+          <mat-option [value]="state">{{ state }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>Min price</mat-label><input matInput type="number" formControlName="minPrice" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>Max price</mat-label><input matInput type="number" formControlName="maxPrice" /></mat-form-field>
+  </form>
+</mat-card>
+
+@if (loading()) {
+  <div class="centered"><mat-spinner diameter="48" /></div>
+} @else if (error()) {
+  <mat-card class="status-card">{{ error() }}</mat-card>
+} @else {
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow dark">Fresh listings</p>
+      <h2>{{ total() }} products found</h2>
+    </div>
+  </div>
+
+  <section class="product-grid">
+    @for (product of products(); track product.id) {
+      <app-product-card [product]="product" [favorite]="wishlist.isFavorite(product.id)" (favoriteToggled)="wishlist.toggle($event)" />
+    }
+  </section>
+
+  @if (!products().length) {
+    <mat-card class="status-card">No products match your filters.</mat-card>
+  }
+
+  <section id="favorites" class="favorites-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow dark">Wishlist</p>
+        <h2>Favorites</h2>
+      </div>
+    </div>
+    <div class="favorites-list product-grid">
+      @for (favorite of favoriteProducts(); track favorite.id) {
+        <app-product-card [product]="favorite" [favorite]="true" (favoriteToggled)="wishlist.toggle($event)" />
+      } @empty {
+        <mat-card class="status-card">Click the heart on any product to add it to favorites.</mat-card>
+      }
+    </div>
+  </section>
+
+  <mat-paginator
+    [length]="total()"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="pageSizeOptions"
+    showFirstLastButtons
+    (page)="changePage($event)"
+  />
+}

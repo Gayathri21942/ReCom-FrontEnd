@@ -1,0 +1,53 @@
+<header class="site-header">
+  <div class="topbar">
+    <a class="brand" routerLink="/">
+      <mat-icon>storefront</mat-icon>
+      <span>Recommerce</span>
+    </a>
+
+    <nav class="nav-links">
+      <a mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a mat-button routerLink="/sell" routerLinkActive="active-link">Sell</a>
+      @if (isAuthenticated()) {
+        <a mat-button routerLink="/my-listings" routerLinkActive="active-link">My Listings</a>
+        <a mat-button routerLink="/chat" routerLinkActive="active-link">Chat</a>
+      }
+      @if (isAdmin()) {
+        <a mat-button routerLink="/admin/products" routerLinkActive="active-link">Admin</a>
+      }
+    </nav>
+
+    <div class="toolbar-actions">
+      <a class="favorites-pill" mat-stroked-button routerLink="/" fragment="favorites">
+        <span class="heart">♥</span>
+        <span>Favorites</span>
+        @if (wishlistCount() > 0) {
+          <span class="count">{{ wishlistCount() }}</span>
+        }
+      </a>
+
+      @if (isAuthenticated()) {
+        <button mat-flat-button [matMenuTriggerFor]="accountMenu">
+          <mat-icon>account_circle</mat-icon>
+          {{ user()?.name }}
+        </button>
+        <mat-menu #accountMenu="matMenu">
+          <button mat-menu-item routerLink="/my-listings">My Listings</button>
+          <button mat-menu-item routerLink="/chat">Messages</button>
+          @if (isAdmin()) {
+            <button mat-menu-item routerLink="/admin/products">Admin Products</button>
+          }
+          <button mat-menu-item (click)="logout()">Logout</button>
+        </mat-menu>
+      } @else {
+        <a mat-flat-button routerLink="/auth/login">Login</a>
+        <a mat-button routerLink="/auth/signup">Sign up</a>
+      }
+    </div>
+  </div>
+  <div class="promo-bar">Free listing for sellers today | Verified second-hand deals across India | Chat before you buy</div>
+</header>
+
+<main class="app-shell">
+  <router-outlet />
+</main>
