@@ -8,8 +8,17 @@
     <nav class="nav-links">
       <a mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       <a mat-button routerLink="/sell" routerLinkActive="active-link">Sell</a>
+      <a class="cart-pill" mat-stroked-button routerLink="/" fragment="cart">
+        <mat-icon>shopping_cart</mat-icon>
+        <span>Cart</span>
+        @if (cartCount() > 0) {
+          <span class="count">{{ cartCount() }}</span>
+        }
+      </a>
+
       @if (isAuthenticated()) {
         <a mat-button routerLink="/my-listings" routerLinkActive="active-link">My Listings</a>
+        <a mat-button routerLink="/my-orders" routerLinkActive="active-link">My Orders</a>
         <a mat-button routerLink="/chat" routerLinkActive="active-link">Chat</a>
       }
       @if (isAdmin()) {
@@ -27,12 +36,17 @@
       </a>
 
       @if (isAuthenticated()) {
+        <a class="orders-pill" mat-stroked-button routerLink="/my-orders" routerLinkActive="active-link">
+          <mat-icon>receipt_long</mat-icon>
+          <span>My Orders</span>
+        </a>
         <button mat-flat-button [matMenuTriggerFor]="accountMenu">
           <mat-icon>account_circle</mat-icon>
           {{ user()?.name }}
         </button>
         <mat-menu #accountMenu="matMenu">
           <button mat-menu-item routerLink="/my-listings">My Listings</button>
+          <button mat-menu-item routerLink="/my-orders">My Orders</button>
           <button mat-menu-item routerLink="/chat">Messages</button>
           @if (isAdmin()) {
             <button mat-menu-item routerLink="/admin/products">Admin Products</button>

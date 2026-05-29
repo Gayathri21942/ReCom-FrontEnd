@@ -12,6 +12,7 @@
     <div class="hero-actions">
       <a mat-flat-button color="primary" routerLink="/sell">Post an ad</a>
       <a mat-stroked-button routerLink="/" fragment="products">Shop deals</a>
+      <a mat-stroked-button routerLink="/my-orders"><mat-icon>receipt_long</mat-icon> My Orders</a>
     </div>
     <div class="hero-stats">
       <div class="hero-stat"><strong>5,200+</strong><span>Verified sellers</span></div>
@@ -36,7 +37,7 @@
 <section class="category-strip">
   @for (category of categories; track category.value) {
     <button type="button" class="category-tile" [class.selected]="filtersForm.value.category === category.value" (click)="selectCategory(category.value)">
-      <span>{{ category.label.slice(0, 1) }}</span>
+      <span><mat-icon>{{ categoryIcon(category.value) }}</mat-icon></span>
       {{ category.label }}
     </button>
   }
@@ -44,7 +45,10 @@
 
 <mat-card class="filters-card" id="products">
   <div class="filters-heading">
-    <strong>Search deals</strong>
+    <div>
+      <strong>Find your next deal</strong>
+      <p>Filter by category, location, and price range.</p>
+    </div>
     <button mat-button type="button" (click)="clearFilters()">Clear filters</button>
   </div>
   <form [formGroup]="filtersForm" class="filters-grid">
@@ -98,6 +102,22 @@
         <app-product-card [product]="favorite" [favorite]="true" (favoriteToggled)="wishlist.toggle($event)" />
       } @empty {
         <mat-card class="status-card">Click the heart on any product to add it to favorites.</mat-card>
+      }
+    </div>
+  </section>
+
+  <section id="cart" class="favorites-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow dark">Saved cart</p>
+        <h2>Cart</h2>
+      </div>
+    </div>
+    <div class="favorites-list product-grid">
+      @for (cartItem of cartProducts(); track cartItem.id) {
+        <app-product-card [product]="cartItem" [favorite]="wishlist.isFavorite(cartItem.id)" (favoriteToggled)="wishlist.toggle($event)" />
+      } @empty {
+        <mat-card class="status-card">Add products to cart from the product detail page.</mat-card>
       }
     </div>
   </section>

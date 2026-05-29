@@ -107,8 +107,16 @@ export class AuthService {
     const lower = rawMessage.toLowerCase();
     let userMessage = 'Something went wrong. Please try again.';
 
-    if (error.status === 403) {
+    if (error.status === 0) {
+      userMessage = 'Cannot connect to the server. Please check that the backend is running and try again.';
+    } else if (error.status === 400) {
+      userMessage = rawMessage && rawMessage !== 'Bad Request' ? rawMessage : 'Some details are invalid. Please check the form and try again.';
+    } else if (error.status === 401) {
+      userMessage = 'Invalid username or password. Please check your login details.';
+    } else if (error.status === 403) {
       userMessage = 'Request blocked by backend. Check CORS/security settings and retry.';
+    } else if (error.status >= 500) {
+      userMessage = 'Server error. Please try again in a moment.';
     } else if (lower.includes('username') && (lower.includes('exists') || lower.includes('taken') || lower.includes('duplicate') || lower.includes('already'))) {
       userMessage = 'Username already taken. Please choose another one.';
     } else if (lower.includes('email') && (lower.includes('exists') || lower.includes('taken') || lower.includes('duplicate') || lower.includes('already'))) {

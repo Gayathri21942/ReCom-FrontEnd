@@ -39,7 +39,7 @@ import { Product } from '../models/product.models';
         </mat-chip-set>
         <div class="card-actions">
           <button class="buy-button" mat-flat-button type="button" [routerLink]="['/product', product.id]" [queryParams]="{ action: 'buy' }">
-            <span class="buy-icon" aria-hidden="true">🛒</span>
+            <mat-icon>shopping_bag</mat-icon>
             Buy
           </button>
         </div>
@@ -47,21 +47,23 @@ import { Product } from '../models/product.models';
     </mat-card>
   `,
   styles: [`
-    .product-card{height:100%;border-radius:14px;overflow:hidden;border:1px solid rgba(15,23,42,.08);box-shadow:0 10px 24px rgba(15,23,42,.08);transition:transform .18s ease,box-shadow .18s ease}
-    .product-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(15,23,42,.14)}
+    .product-card{height:100%;border-radius:14px;overflow:hidden;border:1px solid rgba(15,23,42,.08);box-shadow:0 10px 24px rgba(15,23,42,.08);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;background:#fff}
+    .product-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(15,23,42,.14);border-color:#99f6e4}
     .image-wrap{position:relative;display:block;aspect-ratio:4/3;overflow:hidden;background:#f2f4f5}
     .deal-badge{position:absolute;top:.75rem;left:.75rem;z-index:1;background:#f97316;color:#fff;border-radius:999px;padding:.25rem .6rem;font-size:.75rem;font-weight:900}
-    img{width:100%;height:100%;object-fit:cover}
+    img{width:100%;height:100%;object-fit:cover;transition:transform .25s ease}
+    .product-card:hover img{transform:scale(1.04)}
     .price-row{display:flex;justify-content:space-between;align-items:center}
     .price-row strong{font-size:1.25rem;color:#0f766e}
     .favorite-button{color:#64748b;font-size:1.55rem;line-height:1;background:#fff7ed}
     .favorite-button.selected{color:#e11d48;background:#ffe4e6}
-    .title{display:inline-block;margin:.4rem 0;color:#102a43;font-weight:700;text-decoration:none}
+    .title{display:inline-block;margin:.4rem 0;color:#102a43;font-weight:800;text-decoration:none;line-height:1.3}
     p{color:#52606d;margin:0 0 .7rem}
-    .card-actions{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1rem}
-    .buy-button{background:#facc15;color:#1f2937}
+    mat-chip{font-size:.78rem}
+    .card-actions{display:grid;grid-template-columns:1fr;gap:.5rem;margin-top:1rem}
+    .buy-button{background:#facc15;color:#1f2937;border-radius:10px;font-weight:800}
     .buy-button.mat-flat-button{box-shadow:none}
-    .buy-icon{display:inline-flex;align-items:center;margin-right:.35rem;font-size:1rem}
+    .buy-button mat-icon{font-size:1rem;width:1rem;height:1rem;margin-right:.35rem}
   `]
 })
 export class ProductCardComponent {

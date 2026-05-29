@@ -35,6 +35,12 @@ export const routes: Routes = [
       import('./features/products/pages/my-listings-page.component').then((m) => m.MyListingsPageComponent)
   },
   {
+    path: 'my-orders',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/orders/my-orders.component').then((m) => m.MyOrdersComponent)
+  },
+  {
     path: 'admin/products',
     canActivate: [adminGuard],
     loadComponent: () =>
